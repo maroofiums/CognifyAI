@@ -60,7 +60,7 @@ CognifyAI/
 Requires Docker and Docker Compose.
 
 ```bash
-git clone <this-repo>
+git clone https://github.com/maroofiums/CognifyAI.git
 cd CognifyAI
 docker-compose up --build
 ```
