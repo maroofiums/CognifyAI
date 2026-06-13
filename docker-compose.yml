@@ -1,0 +1,57 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: cognify-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: cognify
+      POSTGRES_PASSWORD: cognify
+      POSTGRES_DB: cognifydb
+    volumes:
+      - cognify-db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cognify -d cognifydb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: cognify-backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://cognify:cognify@db:5432/cognifydb
+      USE_LLM: "false"
+      MISTRAL_API_KEY: ""
+      LLM_MODEL: "mistral-small-latest"
+      CORS_ORIGINS: "http://localhost:5173,http://localhost:3000,http://localhost"
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: cognify-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "5173:80"
+
+volumes:
+  cognify-db-data:
