@@ -27,32 +27,6 @@ The platform combines deterministic static analysis with optional LLM-powered en
 
 ---
 
-## Screenshots
-
-### Home Page
-
-The main workspace where users can write or paste source code, select a programming language, and start the analysis pipeline.
-
-![Home Page](./screenshot/home.jpeg)
-
----
-
-### Analysis Results
-
-Displays bug reports, security findings, complexity analysis, optimization suggestions, generated documentation, and overall quality scores.
-
-![Results Page](./screenshot/result.jpeg)
-
----
-
-### Analysis History
-
-Browse previously analyzed code submissions and reopen detailed reports.
-
-![History Page](./screenshot/history.jpeg)
-
----
-
 ## Features
 
 ### Multi-Stage Analysis Pipeline
