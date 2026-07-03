@@ -1,7 +1,7 @@
 # CognifyAI
 
 <p align="center">
-  <h3 align="center">AI-Powered Code Optimization & Analysis Platform</h3>
+  <h2 align="center">AI-Powered Code Optimization & Analysis Platform</h2>
   <p align="center">
     Analyze, secure, optimize, and document code using a multi-stage AI pipeline.
   </p>
@@ -51,6 +51,7 @@ Browse previously analyzed code submissions and reopen detailed reports.
 
 ![History Page](./screenshot/history.jpeg)
 
+---
 
 ## Features
 
@@ -58,18 +59,18 @@ Browse previously analyzed code submissions and reopen detailed reports.
 
 Every code submission passes through a strictly sequential pipeline:
 
-```text
-Syntax Validation
-      ↓
-Bug Detection
-      ↓
-Security Scanning
-      ↓
-Complexity Analysis
-      ↓
-Code Optimization
-      ↓
-Docstring Generation
+```mermaid
+graph TD
+    SV["Syntax Validation"] --> BD["Bug Detection"]
+    BD --> SS["Security Scanning"]
+    SS --> CA["Complexity Analysis"]
+    CA --> CO["Code Optimization"]
+    CO --> DG["Docstring Generation"]
+
+    %% Styling for visual clarity
+    style SV fill:#e1f5fe,stroke:#0288d1,stroke-width:2px,color:#000
+    style DG fill:#e8f5e9,stroke:#388e3c,stroke-width:2px,color:#000
+
 ```
 
 ### Analysis Capabilities
@@ -115,18 +116,23 @@ Supports two execution modes:
 
 ## Architecture
 
-```text
-Frontend (React + TypeScript)
-            │
-            ▼
-      FastAPI Backend
-            │
- ┌──────────┼──────────┐
- ▼          ▼          ▼
-Pipeline   Database   LLM Layer
-            │
-            ▼
-      PostgreSQL
+```mermaid
+graph TD
+    FE["Frontend (React + TypeScript)"] --> BE["FastAPI Backend"]
+    
+    subgraph Core_Services ["Core Core Engine Layer"]
+        BE --> PL["Pipeline Block"]
+        BE --> DB_Layer["Database Interface"]
+        BE --> LLM["LLM Layer (LangChain / Mistral)"]
+    end
+    
+    DB_Layer --> DB[("PostgreSQL Database")]
+
+    %% Styling
+    style FE fill:#e1f5fe,stroke:#0288d1,stroke-width:2px,color:#000
+    style BE fill:#e8f5e9,stroke:#388e3c,stroke-width:2px,color:#000
+    style DB fill:#ede7f6,stroke:#5e35b1,stroke-width:2px,color:#000
+
 ```
 
 ---
@@ -193,6 +199,7 @@ CognifyAI/
 │
 ├── docker-compose.yml
 └── README.md
+
 ```
 
 ---
@@ -202,24 +209,26 @@ CognifyAI/
 ### Clone Repository
 
 ```bash
-git clone https://github.com/maroofiums/CognifyAI.git
+git clone [https://github.com/maroofiums/CognifyAI.git](https://github.com/maroofiums/CognifyAI.git)
 cd CognifyAI
+
 ```
 
 ### Start Application
 
 ```bash
 docker-compose up --build
+
 ```
 
 ### Available Services
 
-| Service      | URL                        |
-| ------------ | -------------------------- |
-| Frontend     | http://localhost:5173      |
-| Backend API  | http://localhost:8000      |
+| Service | URL |
+| --- | --- |
+| Frontend | http://localhost:5173 |
+| Backend API | http://localhost:8000 |
 | Swagger Docs | http://localhost:8000/docs |
-| PostgreSQL   | localhost:5432             |
+| PostgreSQL | localhost:5432 |
 
 The frontend automatically communicates with the backend through Nginx proxy configuration.
 
@@ -227,12 +236,14 @@ The frontend automatically communicates with the backend through Nginx proxy con
 
 ```bash
 docker-compose down
+
 ```
 
 Remove database volume:
 
 ```bash
 docker-compose down -v
+
 ```
 
 ---
@@ -243,6 +254,7 @@ By default:
 
 ```env
 USE_LLM=false
+
 ```
 
 To enable LangChain + Mistral enrichment:
@@ -252,6 +264,7 @@ environment:
   USE_LLM: "true"
   MISTRAL_API_KEY: "your-api-key"
   LLM_MODEL: "mistral-small-latest"
+
 ```
 
 ---
@@ -272,18 +285,21 @@ source .venv/bin/activate
 pip install -r requirements.txt
 
 uvicorn app.main:app --reload --port 8000
+
 ```
 
 Backend:
 
 ```text
 http://localhost:8000
+
 ```
 
 Swagger Documentation:
 
 ```text
 http://localhost:8000/docs
+
 ```
 
 ---
@@ -296,12 +312,14 @@ cd frontend
 npm install
 
 npm run dev
+
 ```
 
 Frontend:
 
 ```text
 http://localhost:5173
+
 ```
 
 ---
@@ -312,6 +330,7 @@ For local PostgreSQL:
 
 ```env
 DATABASE_URL=postgresql://cognify:cognify@localhost:5432/cognifydb
+
 ```
 
 Run PostgreSQL:
@@ -324,32 +343,18 @@ docker run -d \
   -e POSTGRES_DB=cognifydb \
   -p 5432:5432 \
   postgres:16-alpine
+
 ```
 
 ---
 
 ## Using CognifyAI
 
-### Step 1
-
-Open the Home page and paste source code into the Monaco editor.
-
-### Step 2
-
-Select the programming language.
-
-### Step 3
-
-Click Analyze Code.
-
-### Step 4
-
-Watch live pipeline progress updates.
-
-### Step 5
-
-Review:
-
+1. Open the Home page and paste source code into the Monaco editor.
+2. Select the programming language.
+3. Click **Analyze Code**.
+4. Watch live pipeline progress updates.
+5. Review:
 * Quality score
 * Security findings
 * Bug reports
@@ -357,9 +362,8 @@ Review:
 * Generated documentation
 * Optimized code suggestions
 
-### Step 6
 
-Browse historical analyses from the History page.
+6. Browse historical analyses from the History page.
 
 ---
 
@@ -372,6 +376,7 @@ Browse historical analyses from the History page.
   "language": "python",
   "code": "def add(a,b): return a+b"
 }
+
 ```
 
 ### Response
@@ -395,6 +400,7 @@ Browse historical analyses from the History page.
     "overall": 93
   }
 }
+
 ```
 
 ---
@@ -420,6 +426,7 @@ Browse historical analyses from the History page.
     "overall": 0
   }
 }
+
 ```
 
 ---
@@ -432,6 +439,7 @@ Run the complete backend test suite:
 cd backend
 
 pytest -q
+
 ```
 
 Coverage includes:
@@ -449,11 +457,11 @@ Coverage includes:
 
 Additional documentation can be found inside the docs directory.
 
-| File            | Purpose              |
-| --------------- | -------------------- |
-| architecture.md | System architecture  |
-| api_design.md   | API documentation    |
-| prompts.md      | LLM prompt templates |
+| File | Purpose |
+| --- | --- |
+| architecture.md | System architecture |
+| api_design.md | API documentation |
+| prompts.md | LLM prompt templates |
 
 ---
 
@@ -481,17 +489,7 @@ Additional documentation can be found inside the docs directory.
 
 ## Why CognifyAI?
 
-Most code review tools focus on one aspect of software quality.
-
-CognifyAI combines:
-
-* Static Analysis
-* Security Review
-* Optimization
-* Documentation Generation
-* AI-Assisted Insights
-
-into a single developer workflow.
+Most code review tools focus on one aspect of software quality. CognifyAI combines **Static Analysis**, **Security Review**, **Optimization**, **Documentation Generation**, and **AI-Assisted Insights** into a single developer workflow.
 
 The project demonstrates production-grade software engineering concepts including:
 
@@ -502,16 +500,6 @@ The project demonstrates production-grade software engineering concepts includin
 * Containerized Deployment
 * AI Workflow Pipelines
 * Frontend-Backend Integration
-
----
-
-## Author
-
-**Maroof**
-
-AI/ML Developer • Backend Engineer • FastAPI Enthusiast
-
-GitHub: https://github.com/maroofiums
 
 ---
 
